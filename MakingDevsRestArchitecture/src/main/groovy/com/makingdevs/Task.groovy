@@ -4,10 +4,10 @@ import javax.persistence.*
 
 @Entity
 class Task {
+
   @Id
-  @GeneratedValue(strategy = GeberationType=AUTO)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   Long id
   String description
-
 
 }
