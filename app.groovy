@@ -5,12 +5,15 @@ import org.hornetq.jms.server.config.impl.JMSQueueConfigurationImpl
 @RestController
 class MyWebApp {
 
+  @Autowired
+  JmsTemplate jmsTemplate
+
   @RequestMapping(value="/home")
   String method(){
-    def messageCreator = {session ->
+    def messageCreater = {session ->
       session.createObjectMessage "Hola Mundo: ${new Date()}"
     } as MessageCreator
-    jmsTemplate.send 'makingdevs', messageCreator
+    jmsTemplate.send 'makingdevs', messageCreater
     "Hola Mundo ${new Date()}"
   }
 }
@@ -20,8 +23,12 @@ class MyWebApp {
 @Log
 class Mensajeria {
 
+  @Autowired
+  String myString
+
   @JmsListener(destination = 'makingdevs')
   def receiver(String message){
+    log.info myString
     log.info message
   }
 
@@ -29,4 +36,8 @@ class Mensajeria {
     new  JMSQueueConfigurationImpl('spring-boot', null, false)
   }
 
+}
+
+beans {
+  myString String, "Hola bean de spring"
 }
